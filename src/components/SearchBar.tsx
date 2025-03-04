@@ -29,7 +29,7 @@ export const SearchBar = () => {
         placeholder="Search"
         className="flex-1 bg-transparent outline-none"
       />
-      <MdSearch className="cursor-pointer" aria-label="search icon" />
+      <MdSearch className="cursor-pointer" aria-label="search icon" size={18}/>
     </form>
   );
 };
