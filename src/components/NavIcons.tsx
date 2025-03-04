@@ -34,7 +34,7 @@ export const NavIcons = () => {
     <div className="flex items-center gap-4 xl:gap-6 relative">
       <LuCircleUserRound
         className="cursor-pointer"
-        size={18}
+        size={20}
         onClick={handleAccount}
       />
       {isAccountOpen && (
@@ -45,10 +45,10 @@ export const NavIcons = () => {
           </button>
         </div>
       )}
-      <FaRegBell className="cursor-pointer" size={18} />
+      <FaRegBell className="cursor-pointer" size={20} />
       <div className="relative cursor-pointer">
         <RiShoppingCart2Line
-          size={18}
+          size={20}
           onClick={() => setIsCartOpen(!isCartOpen)}
         />
         <div
