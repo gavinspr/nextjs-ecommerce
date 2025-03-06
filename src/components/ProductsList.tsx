@@ -10,7 +10,7 @@ export const ProductsList = () => {
         href="/products/1"
         className="w-full flex flex-col gap-4 sm:w-[45%] lg:w-[22%]"
       >
-        <div className="cursor-pointer relative w-full h-80">
+        <div className="relative w-full h-80">
           <Image
             src="/temp-product.png"
             alt="product1"
@@ -39,7 +39,7 @@ export const ProductsList = () => {
         href="/products/1"
         className="w-full flex flex-col gap-4 sm:w-[45%] lg:w-[22%]"
       >
-        <div className="cursor-pointer relative w-full h-80">
+        <div className="relative w-full h-80">
           <Image
             src="/temp-product.png"
             alt="product1"
@@ -68,7 +68,7 @@ export const ProductsList = () => {
         href="/products/1"
         className="w-full flex flex-col gap-4 sm:w-[45%] lg:w-[22%]"
       >
-        <div className="cursor-pointer relative w-full h-80">
+        <div className="relative w-full h-80">
           <Image
             src="/temp-product.png"
             alt="product1"
@@ -97,7 +97,7 @@ export const ProductsList = () => {
         href="/products/1"
         className="w-full flex flex-col gap-4 sm:w-[45%] lg:w-[22%]"
       >
-        <div className="cursor-pointer relative w-full h-80">
+        <div className="relative w-full h-80">
           <Image
             src="/temp-product.png"
             alt="product1"
