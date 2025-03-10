@@ -38,19 +38,19 @@ export const Footer = () => {
           <span className="font-semibold">+1 757-123-4567</span>
           <div className="flex gap-4">
             <a href="https://facebook.com" target="_blank" rel="noreferrer">
-              <FaFacebookF />
+              <FaFacebookF size={18} />
             </a>
             <a href="https://instagram.com" target="_blank" rel="noreferrer">
-              <FaInstagram />
+              <FaInstagram size={18} />
             </a>
             <a href="https://pinterest.com" target="_blank" rel="noreferrer">
-              <FaPinterest />
+              <FaPinterest size={18} />
             </a>
             <a href="https://youtube.com" target="_blank" rel="noreferrer">
-              <FaYoutube />
+              <FaYoutube size={18} />
             </a>
             <a href="https://x.com" target="_blank" rel="noreferrer">
-              <FaXTwitter />
+              <FaXTwitter size={18} />
             </a>
           </div>
         </div>
@@ -102,11 +102,11 @@ export const Footer = () => {
           </div>
           <span className="font-semibold">Secure Payments</span>
           <div className="flex justify-between">
-            <FaCcVisa />
-            <FaCcMastercard />
-            <FaCcDiscover />
-            <FaPaypal />
-            <SiKlarna />
+            <FaCcVisa size={18} />
+            <FaCcMastercard size={18} />
+            <FaCcDiscover size={18} />
+            <FaPaypal size={18} />
+            <SiKlarna size={18} />
           </div>
         </div>
       </div>
