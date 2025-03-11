@@ -8,9 +8,13 @@ export const AddProduct = () => {
 
   const handleQuantity = (type: "increment" | "decrement") => {
     if (type === "increment") {
-      quantity < stock && setQuantity((prev) => prev + 1);
+      if (quantity < stock) {
+        setQuantity((prev) => prev + 1);
+      }
     } else {
-      quantity > 1 && setQuantity((prev) => prev - 1);
+      if (quantity > 1) {
+        setQuantity((prev) => prev - 1);
+      }
     }
   };
 

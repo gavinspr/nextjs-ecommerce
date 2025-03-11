@@ -27,7 +27,7 @@ export const ProductImages = () => {
         />
       </div>
       <div className="flex justify-between gap-4 mt-8">
-        {tempImages.map((image: any, index: number) => (
+        {tempImages.map((image, index: number) => (
           <div
             key={image.id}
             className="w-1/4 h-32 relative cursor-pointer"
