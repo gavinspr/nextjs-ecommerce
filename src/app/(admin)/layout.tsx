@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { AppSidebar } from "./_components/Sidebar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -17,6 +19,8 @@ export const metadata: Metadata = {
   description: "Kait admin dashboard.",
 };
 
+// todo: make pages protected
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -27,7 +31,13 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <SidebarProvider>
+          <AppSidebar />
+          <main>
+            <SidebarTrigger />
+            {children}
+          </main>
+        </SidebarProvider>
       </body>
     </html>
   );

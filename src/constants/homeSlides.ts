@@ -2,7 +2,7 @@
 
 import { Slide } from "@/types/slide";
 
-export const SLIDES: Array<Slide> = [
+export const SLIDES: Slide[] = [
   {
     id: 1,
     title: "Spring Sale Collections!",
