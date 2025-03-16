@@ -17,6 +17,7 @@ async function getData(): Promise<Product[]> {
       stock: 13,
       sku: "SH401",
       rating: 4.8,
+      featured: true,
       status: "Active",
     },
     {
@@ -27,6 +28,7 @@ async function getData(): Promise<Product[]> {
       stock: 13,
       sku: "SH401",
       rating: 4.8,
+      featured: true,
       status: "Out of Stock",
     },
     {
@@ -37,6 +39,7 @@ async function getData(): Promise<Product[]> {
       stock: 13,
       sku: "SH401",
       rating: 4.8,
+      featured: false,
       status: "Preorder",
     },
     {
@@ -47,6 +50,7 @@ async function getData(): Promise<Product[]> {
       stock: 13,
       sku: "SH401",
       rating: 4.8,
+      featured: true,
       status: "Backordered",
     },
     {
@@ -57,6 +61,7 @@ async function getData(): Promise<Product[]> {
       stock: 13,
       sku: "SH401",
       rating: 4.8,
+      featured: false,
       status: "Discontinued",
     },
     {
@@ -67,6 +72,7 @@ async function getData(): Promise<Product[]> {
       stock: 13,
       sku: "SH401",
       rating: 4.8,
+      featured: true,
       status: "Limited Stock",
     },
   ];

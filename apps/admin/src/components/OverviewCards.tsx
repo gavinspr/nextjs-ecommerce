@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 
 // todo: real data
+// todo: color percent based on + or -
 
 export const OverviewCards = () => {
   return (

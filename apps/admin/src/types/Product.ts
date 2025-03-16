@@ -10,5 +10,6 @@ export interface Product {
   stock: number;
   sku: string;
   rating: number;
+  featured: boolean;
   status: ProductStatus;
 }

@@ -4,7 +4,7 @@ import { Product } from "@/types/Product";
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "../ui/checkbox";
 import { DataTableRowActions } from "./ProductTableRowActions";
-import { FaStar } from "react-icons/fa6";
+import { FaStar, FaCircleCheck } from "react-icons/fa6";
 import { Badge } from "../ui/badge";
 import { DataTableColumnHeader } from "../DataTable/DataTableColumnHeader";
 import { ProductStatus } from "@/types/ProductStatus";
@@ -85,6 +85,23 @@ export const productTableColumns: ColumnDef<Product>[] = [
         <div className="flex items-center gap-1">
           <FaStar color="gold" size={12} />
           {rating}
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "featured",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Featured" />
+    ),
+    cell: ({ row }) => {
+      const featured: boolean = row.getValue("featured");
+
+      if (!featured) return null;
+
+      return (
+        <div className="flex justify-center items-center w-1/3">
+          <FaCircleCheck size={16} className="fill-green-500" />
         </div>
       );
     },
