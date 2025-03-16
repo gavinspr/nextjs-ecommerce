@@ -1,3 +1,4 @@
+import { OverviewCards } from "@/components/OverviewCards";
 import { DataTable } from "@/components/DataTable/DataTable";
 import { productTableColumns } from "@/components/ProductTable/productTableColumns";
 import { ProductTableToolbar } from "@/components/ProductTable/ProductTableToolbar";
@@ -89,7 +90,7 @@ export default async function ProductListPage() {
           Add New Product
         </Link>
       </div>
-      <div className="flex flex-col md:flex-wrap md:flex-row "></div>
+      <OverviewCards />
       <div className="w-full space-y-4">
         <div className="">
           <DataTable
