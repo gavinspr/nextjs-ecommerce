@@ -6,15 +6,8 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -27,15 +20,13 @@ import {
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
 import { SIDEBAR_ITEMS } from "@/constants/sidebarItems";
-import { SidebarItem, SidebarSubItem } from "@/types/sidebarItem";
-import { ChevronRight, ChevronUp, User2 } from "lucide-react";
+import { SidebarItem, SidebarSubItem } from "@/types/SidebarItem";
 import { FaShop } from "react-icons/fa6";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-
-// todo: footer
+import { LuChevronRight } from "react-icons/lu";
 
 export const AppSidebar = () => {
   const [openItems, setOpenItems] = useState<string[]>([]);
@@ -125,9 +116,13 @@ export const AppSidebar = () => {
                     <SidebarMenuItem>
                       <CollapsibleTrigger asChild>
                         <SidebarMenuButton>
-                          {item.icon && <item.icon />}
+                          {item.icon && (
+                            <div className="text-lg">
+                              <item.icon />
+                            </div>
+                          )}
                           <span>{item.title}</span>
-                          <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                          <LuChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                         </SidebarMenuButton>
                       </CollapsibleTrigger>
                       <CollapsibleContent>
@@ -157,7 +152,11 @@ export const AppSidebar = () => {
                       className={menuButtonStyles(isActive(item.href))}
                     >
                       <Link href={item.href}>
-                        {item.icon && <item.icon />}
+                        {item.icon && (
+                          <div className="text-lg">
+                            <item.icon />
+                          </div>
+                        )}
                         <span>{item.title}</span>
                       </Link>
                     </SidebarMenuButton>
@@ -168,34 +167,6 @@ export const AppSidebar = () => {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <SidebarMenuButton>
-                  <User2 /> Username
-                  <ChevronUp className="ml-auto" />
-                </SidebarMenuButton>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                side="top"
-                className="w-[--radix-popper-anchor-width]"
-              >
-                <DropdownMenuItem>
-                  <span>Account</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <span>Billing</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <span>Sign out</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarFooter>
     </Sidebar>
   );
 };

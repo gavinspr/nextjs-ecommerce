@@ -1,6 +1,6 @@
 // todo: make dynamic with admin portal
 
-import { Slide } from "../types/slide";
+import { Slide } from "../types/Slide";
 
 export const SLIDES: Slide[] = [
   {

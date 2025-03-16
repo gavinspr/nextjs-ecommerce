@@ -1,7 +1,7 @@
 "use client";
 
 import { SLIDES } from "../constants/homeSlides";
-import { Slide } from "../types/slide";
+import { Slide } from "../types/Slide";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";

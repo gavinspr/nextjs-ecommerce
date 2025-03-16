@@ -1,6 +1,6 @@
-import { SidebarItem } from "../../../admin/src/types/sidebarItem";
+import { SidebarItem } from "../types/SidebarItem";
 import {
-  LuBox,
+  LuPackage,
   LuChartLine,
   LuClipboardList,
   LuGauge,
@@ -19,19 +19,19 @@ export const SIDEBAR_ITEMS: SidebarItem[] = [
   {
     title: "Products",
     href: "/admin/products",
-    icon: LuBox,
+    icon: LuPackage,
     subItems: [
       {
         title: "Product List",
-        href: "#",
+        href: "/product-list",
       },
       {
         title: "Categories & Tags",
-        href: "#",
+        href: "/categories",
       },
       {
         title: "Product Reviews",
-        href: "#",
+        href: "/product-reviews",
       },
     ],
   },
@@ -64,7 +64,7 @@ export const SIDEBAR_ITEMS: SidebarItem[] = [
         href: "/customer-list",
       },
       {
-        title: "Customer Chats",
+        title: "Customer Messages",
         href: "#",
       },
     ],
@@ -110,6 +110,10 @@ export const SIDEBAR_ITEMS: SidebarItem[] = [
       },
       {
         title: "Product Performance",
+        href: "#",
+      },
+      {
+        title: "Site Traffic",
         href: "#",
       },
     ],
