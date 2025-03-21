@@ -12,7 +12,10 @@
     "lint": "pnpm run --filter \"@nextjs-ecommerce/*\" lint",
     "check-types": "tsc --noEmit",
     "prepare": "husky",
-    "pre-commit": "pnpm run --filter \"@nextjs-ecommerce/*\" pre-commit"
+    "pre-commit": "pnpm run --filter \"@nextjs-ecommerce/*\" pre-commit",
+    "db:generate": "pnpm --filter @nextjs-ecommerce/db db:generate",
+    "db:migrate": "pnpm --filter @nextjs-ecommerce/db db:migrate",
+    "db:push": "pnpm --filter @nextjs-ecommerce/db db:push"
   },
   "dependencies": {
     "@radix-ui/react-collapsible": "^1.1.3",
