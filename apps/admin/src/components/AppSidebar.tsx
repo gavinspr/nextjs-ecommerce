@@ -19,8 +19,8 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
-import { SIDEBAR_ITEMS } from "@/constants/sidebarItems";
-import { SidebarItem, SidebarSubItem } from "@/types/SidebarItem";
+import { SIDEBAR_ITEMS } from "@/constants/sidebar-items";
+import { SidebarItem } from "@/types/SidebarItem";
 import { FaShop } from "react-icons/fa6";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -33,54 +33,37 @@ export const AppSidebar = () => {
 
   const isInitialLoad = useRef<boolean>(true);
 
-  const pathname: string = usePathname();
+  const pathname = usePathname();
 
-  // Handle initial load - only open the dropdown with the active page
+  // Handle initial load - only open the dropdown with the active page on refresh
   useEffect(() => {
-    const isSubItemActive = (subItems: SidebarSubItem[]): boolean => {
-      return subItems.some((subItem) => pathname === subItem.href);
-    };
-
     if (isInitialLoad.current) {
-      const isRefreshed: boolean =
-        sessionStorage.getItem("sidebarRefreshed") === "true";
+      const pathSegments = pathname.split("/").filter(Boolean);
+      const firstSegment = pathSegments[0]?.toLowerCase();
 
-      const activeParent: string | undefined = SIDEBAR_ITEMS.find(
-        (item) => item.subItems && isSubItemActive(item.subItems)
-      )?.title;
+      const activeGroup = SIDEBAR_ITEMS.find(
+        (item) => item.title.toLowerCase() === firstSegment
+      );
 
-      if (isRefreshed) {
-        sessionStorage.removeItem("sidebarRefreshed");
-      }
-
-      setOpenItems(activeParent ? [activeParent] : []);
-
+      setOpenItems(activeGroup ? [activeGroup.title] : []);
       isInitialLoad.current = false;
     }
   }, [pathname]);
 
-  // Handle beforeunload for page refresh detection
-  useEffect(() => {
-    const handleBeforeUnload = () => {
-      sessionStorage.setItem("sidebarRefreshed", "true");
-    };
-    window.addEventListener("beforeunload", handleBeforeUnload);
-
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, []);
-
   const toggleDropdown = (title: string) => {
-    setOpenItems((prev: string[]) =>
+    setOpenItems((prev) =>
       prev.includes(title)
-        ? prev.filter((item: string) => item !== title)
+        ? prev.filter((item) => item !== title)
         : [...prev, title]
     );
   };
 
-  const isActive = (href?: string): boolean => {
-    return href ? pathname === href : false;
+  const isActive = (href?: string, isSubItem: boolean = false): boolean => {
+    if (!href) return false;
+
+    return isSubItem
+      ? pathname === href || pathname.startsWith(`${href}/`)
+      : pathname === href;
   };
 
   const menuButtonStyles = (active: boolean): string =>
@@ -112,6 +95,7 @@ export const AppSidebar = () => {
                     asChild
                     open={openItems.includes(item.title)}
                     onOpenChange={() => toggleDropdown(item.title)}
+                    className="group/collapsible"
                   >
                     <SidebarMenuItem>
                       <CollapsibleTrigger asChild>
@@ -127,12 +111,12 @@ export const AppSidebar = () => {
                       </CollapsibleTrigger>
                       <CollapsibleContent>
                         <SidebarMenuSub>
-                          {item.subItems.map((subItem: SidebarSubItem) => (
+                          {item.subItems.map((subItem) => (
                             <SidebarMenuSubItem key={subItem.title}>
                               <SidebarMenuSubButton
                                 asChild
                                 className={menuButtonStyles(
-                                  isActive(subItem.href)
+                                  isActive(subItem.href, true)
                                 )}
                               >
                                 <Link href={subItem.href}>

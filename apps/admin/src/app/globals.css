@@ -120,6 +120,18 @@
   body {
     @apply bg-background text-foreground;
   }
+  h1 {
+    @apply text-2xl font-semibold;
+  }
+  h2 {
+    @apply text-xl font-semibold;
+  }
+  h3 {
+    @apply text-lg font-semibold;
+  }
+  button {
+    @apply cursor-pointer; 
+  }
 }
 
 @keyframes tada {
@@ -158,4 +170,12 @@
 
 .animate-tada {
   animation: tada 1s ease-in-out infinite;
+}
+
+.tiptap p.is-editor-empty:first-child::before {
+  color: #adb5bd;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
 }

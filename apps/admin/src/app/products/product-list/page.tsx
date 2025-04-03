@@ -1,10 +1,12 @@
 import { OverviewCards } from "@/components/OverviewCards";
-import { DataTable } from "@/components/DataTable/DataTable";
+import { DataTable } from "@/components/DataTable";
 import { productTableColumns } from "@/components/ProductTable/productTableColumns";
 import { ProductTableToolbar } from "@/components/ProductTable/ProductTableToolbar";
 import { Product } from "@/types/Product";
 import { PlusCircle } from "lucide-react";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { LuDownload, LuUpload } from "react-icons/lu";
 
 // temp
 async function getData(): Promise<Product[]> {
@@ -77,26 +79,36 @@ async function getData(): Promise<Product[]> {
     },
   ];
 }
+
+// todo: export
+// todo: import
+
 export default async function ProductListPage() {
   const data = await getData();
 
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between space-y-2">
-        <h1 className="text-2xl font-bold tracking-tight">Products</h1>
-        <Link
-          className="inline-flex items-center justify-center gap-2 whitespace-nowrap
-          rounded-md text-sm font-medium ring-offset-background transition-colors
-          focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring 
-          focus-visible:ring-offset-2 bg-primary text-primary-foreground
-          hover:bg-primary/90 h-10 px-4 py-2"
-          href="/create-product"
-        >
-          <PlusCircle size={18} />
-          Add New Product
+        <div className="flex flex-col">
+          <h1 className="tracking-tight">Products</h1>
+          <div className="flex gap-4 mt-1 text-sm">
+            <button className="flex items-center gap-1 text-muted-foreground hover:text-primary">
+              <LuDownload />
+              Export
+            </button>
+            <button className="flex items-center gap-1 text-muted-foreground  hover:text-primary">
+              <LuUpload />
+              Import
+            </button>
+          </div>
+        </div>
+        <Link href="/products/add-product">
+          <Button>
+            <PlusCircle size={18} />
+            Add New Product
+          </Button>
         </Link>
       </div>
-      <OverviewCards />
       <div className="w-full space-y-4">
         <div className="">
           <DataTable

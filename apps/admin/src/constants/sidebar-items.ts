@@ -23,11 +23,11 @@ export const SIDEBAR_ITEMS: SidebarItem[] = [
     subItems: [
       {
         title: "Product List",
-        href: "/product-list",
+        href: "/products/product-list",
       },
       {
-        title: "Categories & Tags",
-        href: "/categories",
+        title: "Categories",
+        href: "/products/categories",
       },
       {
         title: "Product Reviews",
@@ -42,7 +42,7 @@ export const SIDEBAR_ITEMS: SidebarItem[] = [
     subItems: [
       {
         title: "Order List",
-        href: "/order-list",
+        href: "/orders/order-list",
       },
       {
         title: "Returns & Refunds",

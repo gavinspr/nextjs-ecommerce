@@ -6,7 +6,7 @@ import { Input } from "../ui/input";
 import { DataTableFilter } from "../DataTable/DataTableFilter";
 import { Button } from "../ui/button";
 import { DataTableViewOptions } from "../DataTable/DataTableViewOptions";
-import { PRODUCT_STATUS_OPTIONS } from "@/constants/productStatuses";
+import { PRODUCT_STATUS_OPTIONS } from "@/constants/product-statuses";
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
