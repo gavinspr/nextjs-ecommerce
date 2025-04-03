@@ -66,7 +66,8 @@ export function ImageDropzone({
           <Image
             src={previewUrl}
             alt="Preview"
-            className="h-full w-full rounded-lg object-cover"
+            className="rounded-lg object-cover"
+            fill
           />
           <button
             type="button"
