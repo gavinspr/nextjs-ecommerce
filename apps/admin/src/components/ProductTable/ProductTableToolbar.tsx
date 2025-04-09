@@ -2,9 +2,9 @@
 
 import { Table } from "@tanstack/react-table";
 import { X } from "lucide-react";
-import { Input } from "../ui/input";
+import { Input } from "@/components/ui/input";
 import { DataTableFilter } from "../DataTable/DataTableFilter";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import { DataTableViewOptions } from "../DataTable/DataTableViewOptions";
 import { PRODUCT_STATUS_OPTIONS } from "@/constants/product-statuses";
 

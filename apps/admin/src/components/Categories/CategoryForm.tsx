@@ -21,12 +21,14 @@ import {
   CategoryFormValues,
 } from "@nextjs-ecommerce/db/src/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SubmitButton } from "./SubmitButton";
+import { SubmitButton } from "../SubmitButton";
 import { toast } from "sonner";
 import { useNavigationGuard } from "@/hooks/use-navigation-guard";
-import { DiscardAlertButton } from "./DiscardAlertButton";
+import { DiscardAlertButton } from "../DiscardAlertButton";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 // todo: add products to category section
+// todo: add status to form
 
 interface CategoryFormProps {
   initialData?: Category | null;
@@ -68,7 +70,6 @@ export const CategoryForm = ({ initialData, onSubmit }: CategoryFormProps) => {
       // Execute the submission
       await onSubmit(values);
 
-      // Dismiss the loading toast and show success
       toast.dismiss(loadingToastId);
       toast.success(
         initialData
@@ -113,83 +114,88 @@ export const CategoryForm = ({ initialData, onSubmit }: CategoryFormProps) => {
         <div className="w-full lg:w-4/5 xl:w-3/4 gap-4">
           <div className="space-y-6">
             {/* Category Information Section */}
-            <div className="flex-1 space-y-4 bg-muted rounded-md p-4 md:p-6">
-              <h2>Category Information</h2>
-              <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
-                {/* Fields */}
-                <div className="lg:col-span-3 space-y-4">
-                  <FormField
-                    control={form.control}
-                    name="name"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel required>Category Name</FormLabel>
-                        <FormControl>
-                          <Input
-                            {...field}
-                            placeholder="Category name"
-                            className="bg-background"
-                            value={field.value || ""}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="description"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Description</FormLabel>
-                        <FormControl>
-                          <Textarea
-                            {...field}
-                            placeholder="Describe the category"
-                            className="min-h-[120px] md:min-h-[150px] bg-background resize-none"
-                            value={field.value || ""}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
+            <Card className="bg-muted">
+              <CardHeader>
+                <h2>Category Information</h2>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+                  {/* Fields */}
+                  <div className="lg:col-span-3 space-y-4">
+                    <FormField
+                      control={form.control}
+                      name="name"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel required>Category Name</FormLabel>
+                          <FormControl>
+                            <Input
+                              {...field}
+                              placeholder="Category name"
+                              className="bg-background"
+                              value={field.value || ""}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="description"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Description</FormLabel>
+                          <FormControl>
+                            <Textarea
+                              {...field}
+                              placeholder="Describe the category"
+                              className="min-h-[120px] md:min-h-[150px] bg-background resize-none"
+                              value={field.value || ""}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
 
-                {/* Image upload */}
-                <div className="lg:col-span-2">
-                  <FormField
-                    control={form.control}
-                    name="image"
-                    render={({ field }) => (
-                      <FormItem className="h-full flex flex-col">
-                        <FormLabel required>Category Image</FormLabel>
-                        <FormControl>
-                          <ImageDropzone
-                            value={field.value}
-                            onChange={field.onChange}
-                            existingImage={initialData?.image}
-                            className="h-full min-h-[180px] md:min-h-[200px]"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                  {/* Image upload */}
+                  <div className="lg:col-span-2">
+                    <FormField
+                      control={form.control}
+                      name="image"
+                      render={({ field }) => (
+                        <FormItem className="h-full flex flex-col">
+                          <FormLabel required>Category Image</FormLabel>
+                          <FormControl>
+                            <ImageDropzone
+                              value={field.value}
+                              onChange={field.onChange}
+                              existingImage={initialData?.image}
+                              className="h-full min-h-[180px] md:min-h-[200px]"
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
                 </div>
-              </div>
-            </div>
+              </CardContent>
+            </Card>
 
             {/* Add Products Section */}
-            <div className="space-y-4 bg-muted rounded-md p-4 md:p-6">
-              <div className="flex items-center justify-between">
+            <Card className="bg-muted">
+              <CardHeader>
                 <h2>
                   Products in Category
                   <span className="ml-2 text-muted-foreground">0</span>
                 </h2>
-              </div>
+              </CardHeader>
               <Separator />
-            </div>
+              <CardContent></CardContent>
+            </Card>
           </div>
         </div>
       </form>

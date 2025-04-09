@@ -20,7 +20,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import { DataTablePagination } from "./DataTablePagination";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { ComponentType, useState } from "react";

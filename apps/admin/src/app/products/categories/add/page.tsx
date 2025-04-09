@@ -1,5 +1,5 @@
 import { saveCategory } from "@/services/save-category";
-import { CategoryForm } from "@/components/CategoryForm";
+import { CategoryForm } from "@/components/Categories/CategoryForm";
 import { CategoryFormValues } from "@nextjs-ecommerce/db/src/types";
 
 export default function AddCategoryPage() {

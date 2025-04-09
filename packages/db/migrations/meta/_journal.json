@@ -8,6 +8,20 @@
       "when": 1743611407590,
       "tag": "0000_same_annihilus",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1743792400713,
+      "tag": "0001_broken_paibok",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1744135030274,
+      "tag": "0002_perpetual_ikaris",
+      "breakpoints": true
     }
   ]
 }

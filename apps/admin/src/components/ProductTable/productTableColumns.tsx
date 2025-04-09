@@ -2,10 +2,10 @@
 
 import { Product } from "@/types/Product";
 import { ColumnDef } from "@tanstack/react-table";
-import { Checkbox } from "../ui/checkbox";
+import { Checkbox } from "@/components/ui/checkbox";
 import { DataTableRowActions } from "./ProductTableRowActions";
 import { FaStar, FaCircleCheck } from "react-icons/fa6";
-import { Badge } from "../ui/badge";
+import { Badge } from "@/components/ui/badge";
 import { DataTableColumnHeader } from "../DataTable/DataTableColumnHeader";
 import { ProductStatus } from "@/types/ProductStatus";
 

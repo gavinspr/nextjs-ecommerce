@@ -1,15 +1,15 @@
 import { LuClock, LuMessageSquareText } from "react-icons/lu";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu";
 import { NotificationBadge } from "../NotificationBadge";
 import Link from "next/link";
-import { ScrollArea } from "../ui/scroll-area";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 // temp
 const messages = [
@@ -111,12 +111,9 @@ const messages = [
 export const NavMessages = () => {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger
-        asChild
-        className="[&_svg:not([class*='size-'])]:size-5"
-      >
+      <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon" className="relative rounded-full">
-          <LuMessageSquareText />
+          <LuMessageSquareText size={20} />
           <NotificationBadge value={4} />
         </Button>
       </DropdownMenuTrigger>

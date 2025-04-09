@@ -1,0 +1,1 @@
+ALTER TABLE "categories" RENAME COLUMN "status" TO "is_active";
