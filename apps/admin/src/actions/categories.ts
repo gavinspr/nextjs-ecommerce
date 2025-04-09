@@ -1,8 +1,15 @@
 "use server";
 
+import { uploadToBlob } from "@/lib/blob-upload";
 import { db, eq, sql } from "@nextjs-ecommerce/db";
 import { categoriesTable } from "@nextjs-ecommerce/db/src/schemas";
-import { categorySelectSchema } from "@nextjs-ecommerce/db/src/types";
+import {
+  categorySelectSchema,
+  createCategoryFormSchema,
+  InsertCategory,
+  UpdateCategory,
+  updateCategoryFormSchema,
+} from "@nextjs-ecommerce/db/src/types";
 import { revalidatePath } from "next/cache";
 
 // todo: secure after setting up auth
@@ -38,6 +45,71 @@ export async function getAllCategories() {
     throw new Error("Failed to fetch categories");
   }
 }
+
+export const createCategory = async (formData: FormData) => {
+  try {
+    const rawData = Object.fromEntries(formData.entries());
+
+    const validated = createCategoryFormSchema.safeParse(rawData);
+
+    if (!validated.success) {
+      console.error("Validation errors:", validated.error.format());
+      throw new Error("Invalid form data");
+    }
+
+    const { image, ...restData } = validated.data;
+
+    const imageUrl = await uploadToBlob(image);
+
+    const categoryData: InsertCategory = { ...restData, image: imageUrl };
+
+    await db.insert(categoriesTable).values(categoryData).returning();
+
+    revalidatePath("/products/categories");
+  } catch (error: unknown) {
+    console.error("Category creation error:", error);
+    throw error instanceof Error
+      ? error
+      : new Error("Failed to create category");
+  }
+};
+
+export const updateCategory = async (id: string, formData: FormData) => {
+  try {
+    const rawData = Object.fromEntries(formData.entries());
+
+    const validated = updateCategoryFormSchema.safeParse(rawData);
+
+    if (rawData.image instanceof File && rawData.image.size === 0) {
+      delete rawData.image;
+    }
+
+    if (!validated.success) {
+      console.error("Validation errors:", validated.error.format());
+      throw new Error("Invalid form data");
+    }
+
+    const { image, ...restData } = validated.data;
+
+    const updateData: UpdateCategory = { ...restData };
+
+    if (image) {
+      updateData.image = await uploadToBlob(image);
+    }
+
+    await db
+      .update(categoriesTable)
+      .set(updateData)
+      .where(eq(categoriesTable.id, id))
+      .returning();
+
+    revalidatePath("/dashboard/categories");
+  } catch (error: unknown) {
+    throw error instanceof Error
+      ? error
+      : new Error("Failed to update category");
+  }
+};
 
 export async function deleteCategory(id: string) {
   if (!id) {

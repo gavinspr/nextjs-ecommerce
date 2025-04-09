@@ -17,8 +17,9 @@ import { Separator } from "@/components/ui/separator";
 import { ImageDropzone } from "@/components/ImageDropzone";
 import {
   Category,
-  categoryFormSchema,
   CategoryFormValues,
+  createCategoryFormSchema,
+  updateCategoryFormSchema,
 } from "@nextjs-ecommerce/db/src/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitButton } from "../SubmitButton";
@@ -26,30 +27,34 @@ import { toast } from "sonner";
 import { useNavigationGuard } from "@/hooks/use-navigation-guard";
 import { DiscardAlertButton } from "../DiscardAlertButton";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Switch } from "@/components/ui/switch";
 
 // todo: add products to category section
-// todo: add status to form
 
 interface CategoryFormProps {
   initialData?: Category | null;
-  onSubmit: (values: CategoryFormValues) => Promise<void>;
+  onSubmit: (formData: FormData) => Promise<void>;
 }
 
 export const CategoryForm = ({ initialData, onSubmit }: CategoryFormProps) => {
   const router = useRouter();
 
   const form = useForm<CategoryFormValues>({
-    resolver: zodResolver(categoryFormSchema),
+    resolver: zodResolver(
+      initialData ? updateCategoryFormSchema : createCategoryFormSchema
+    ),
     defaultValues: initialData
       ? {
           name: initialData.name,
           description: initialData.description || "",
           image: undefined,
+          isActive: initialData.isActive,
         }
       : {
           name: "",
           description: "",
           image: undefined,
+          isActive: true,
         },
   });
 
@@ -67,8 +72,18 @@ export const CategoryForm = ({ initialData, onSubmit }: CategoryFormProps) => {
     );
 
     try {
-      // Execute the submission
-      await onSubmit(values);
+      const formData = new FormData();
+      Object.entries(values).forEach(([key, value]) => {
+        if (value === undefined || value === null) return;
+
+        if (value instanceof File) {
+          formData.append(key, value, value.name);
+        } else {
+          formData.append(key, value.toString());
+        }
+      });
+
+      await onSubmit(formData);
 
       toast.dismiss(loadingToastId);
       toast.success(
@@ -76,11 +91,8 @@ export const CategoryForm = ({ initialData, onSubmit }: CategoryFormProps) => {
           ? "Category updated successfully"
           : "Category created successfully"
       );
-
-      // Navigate after successful submission
       router.push("/products/categories");
     } catch (error: unknown) {
-      // Dismiss the loading toast and show error
       toast.dismiss(loadingToastId);
       toast.error(
         error instanceof Error ? error.message : "Something went wrong"
@@ -115,8 +127,24 @@ export const CategoryForm = ({ initialData, onSubmit }: CategoryFormProps) => {
           <div className="space-y-6">
             {/* Category Information Section */}
             <Card className="bg-muted">
-              <CardHeader>
+              <CardHeader className="flex justify-between items-center">
                 <h2>Category Information</h2>
+                <FormField
+                  control={form.control}
+                  name="isActive"
+                  render={({ field }) => (
+                    <FormItem className="flex items-center justify-between mt-1 md:mt-0">
+                      <FormControl>
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                          className="scale-90 md:scale-100 "
+                        />
+                      </FormControl>
+                      <FormLabel>Active</FormLabel>
+                    </FormItem>
+                  )}
+                />
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
