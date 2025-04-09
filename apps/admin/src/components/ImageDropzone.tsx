@@ -10,7 +10,7 @@ import Image from "next/image";
 
 interface ImageDropzoneProps {
   value?: File | null;
-  onChange: (file: File | null) => void;
+  onChange: (file: File | undefined) => void;
   existingImage?: string;
   className?: string;
 }
@@ -23,7 +23,7 @@ export function ImageDropzone({
 }: ImageDropzoneProps) {
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
-      onChange(acceptedFiles[0] || null);
+      onChange(acceptedFiles[0] || undefined);
     },
     [onChange]
   );
@@ -73,7 +73,7 @@ export function ImageDropzone({
             type="button"
             onClick={(e) => {
               e.stopPropagation();
-              onChange(null);
+              onChange(undefined);
             }}
             className="absolute -right-2 -top-2 rounded-full bg-destructive p-1 text-white shadow-sm transition hover:bg-destructive/90"
           >
