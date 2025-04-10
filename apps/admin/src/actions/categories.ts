@@ -1,16 +1,15 @@
 "use server";
 
 import { uploadToBlob } from "@/lib/blob-upload";
-import { db, eq, sql } from "@nextjs-ecommerce/db";
+import { and, db, eq, not, sql } from "@nextjs-ecommerce/db";
 import { categoriesTable } from "@nextjs-ecommerce/db/src/schemas";
-import {
-  categorySelectSchema,
-  createCategoryFormSchema,
-  InsertCategory,
-  UpdateCategory,
-  updateCategoryFormSchema,
-} from "@nextjs-ecommerce/db/src/types";
+import { categorySelectSchema } from "@nextjs-ecommerce/db/src/types";
 import { revalidatePath } from "next/cache";
+import {
+  createCategoryFormSchema,
+  updateCategoryFormSchema,
+} from "@/validators/category";
+import { InsertCategory, UpdateCategory } from "@/types/category";
 
 // todo: secure after setting up auth
 
@@ -46,11 +45,38 @@ export async function getAllCategories() {
   }
 }
 
-export const createCategory = async (formData: FormData) => {
+export async function checkCategoryNameUnique(
+  name: string,
+  excludeId?: string
+) {
+  const query = excludeId
+    ? db
+        .select()
+        .from(categoriesTable)
+        .where(
+          and(
+            eq(categoriesTable.name, name),
+            not(eq(categoriesTable.id, excludeId))
+          )
+        )
+    : db.select().from(categoriesTable).where(eq(categoriesTable.name, name));
+
+  const existingCategories = await query;
+  return existingCategories.length === 0;
+}
+
+export async function createCategory(formData: FormData) {
   try {
     const rawData = Object.fromEntries(formData.entries());
 
-    const validated = createCategoryFormSchema.safeParse(rawData);
+    const validated = await createCategoryFormSchema.safeParseAsync(rawData);
+
+    const isNameUnique = await checkCategoryNameUnique(
+      formData.get("name") as string
+    );
+    if (!isNameUnique) {
+      throw new Error("Category name already exists");
+    }
 
     if (!validated.success) {
       console.error("Validation errors:", validated.error.format());
@@ -72,13 +98,21 @@ export const createCategory = async (formData: FormData) => {
       ? error
       : new Error("Failed to create category");
   }
-};
+}
 
-export const updateCategory = async (id: string, formData: FormData) => {
+export async function updateCategory(id: string, formData: FormData) {
   try {
     const rawData = Object.fromEntries(formData.entries());
 
-    const validated = updateCategoryFormSchema.safeParse(rawData);
+    const validated = await updateCategoryFormSchema.safeParseAsync(rawData);
+
+    const isNameUnique = await checkCategoryNameUnique(
+      formData.get("name") as string,
+      id
+    );
+    if (!isNameUnique) {
+      throw new Error("Category name already exists");
+    }
 
     if (rawData.image instanceof File && rawData.image.size === 0) {
       delete rawData.image;
@@ -109,7 +143,7 @@ export const updateCategory = async (id: string, formData: FormData) => {
       ? error
       : new Error("Failed to update category");
   }
-};
+}
 
 export async function deleteCategory(id: string) {
   if (!id) {

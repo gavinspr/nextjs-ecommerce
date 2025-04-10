@@ -16,11 +16,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
 import { ImageDropzone } from "@/components/ImageDropzone";
 import {
-  Category,
-  CategoryFormValues,
   createCategoryFormSchema,
   updateCategoryFormSchema,
-} from "@nextjs-ecommerce/db/src/types";
+} from "@/validators/category";
+import { Category } from "@nextjs-ecommerce/db/src/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitButton } from "../SubmitButton";
 import { toast } from "sonner";
@@ -28,6 +27,11 @@ import { useNavigationGuard } from "@/hooks/use-navigation-guard";
 import { DiscardAlertButton } from "../DiscardAlertButton";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
+import { useEffect, useState } from "react";
+import { Loader2 } from "lucide-react";
+import { checkCategoryNameUnique } from "@/actions/categories";
+import { debounce } from "@/utils/debounce";
+import { CategoryFormValues } from "@/types/category";
 
 // todo: add products to category section
 
@@ -38,6 +42,7 @@ interface CategoryFormProps {
 
 export const CategoryForm = ({ initialData, onSubmit }: CategoryFormProps) => {
   const router = useRouter();
+  const [isCheckingName, setIsCheckingName] = useState(false);
 
   const form = useForm<CategoryFormValues>({
     resolver: zodResolver(
@@ -45,6 +50,7 @@ export const CategoryForm = ({ initialData, onSubmit }: CategoryFormProps) => {
     ),
     defaultValues: initialData
       ? {
+          id: initialData.id,
           name: initialData.name,
           description: initialData.description || "",
           image: undefined,
@@ -60,13 +66,47 @@ export const CategoryForm = ({ initialData, onSubmit }: CategoryFormProps) => {
 
   useNavigationGuard({ isDirty: form.formState.isDirty });
 
+  useEffect(() => {
+    const debouncedCheckName = debounce(async (name: string) => {
+      if (!name || name.length < 2) return;
+
+      setIsCheckingName(true);
+      try {
+        const isUnique = await checkCategoryNameUnique(name, initialData?.id);
+
+        if (!isUnique) {
+          form.setError("name", {
+            type: "manual",
+            message: "Category name already exists",
+          });
+        } else {
+          form.clearErrors("name");
+        }
+      } catch (error) {
+        console.error("Failed to check category name:", error);
+      } finally {
+        setIsCheckingName(false);
+      }
+    }, 500);
+
+    const subscription = form.watch((value, { name }) => {
+      if (name === "name") {
+        debouncedCheckName(value.name || "");
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+      debouncedCheckName.cancel();
+    };
+  }, [form, form.watch, initialData?.id]);
+
   const handleConfirmDiscard = () => {
     form.reset();
     router.push("/products/categories");
   };
 
   const handleSubmit = async (values: CategoryFormValues) => {
-    // Create the loading toast
     const loadingToastId = toast.loading(
       initialData ? "Updating category..." : "Creating category..."
     );
@@ -157,12 +197,19 @@ export const CategoryForm = ({ initialData, onSubmit }: CategoryFormProps) => {
                         <FormItem>
                           <FormLabel required>Category Name</FormLabel>
                           <FormControl>
-                            <Input
-                              {...field}
-                              placeholder="Category name"
-                              className="bg-background"
-                              value={field.value || ""}
-                            />
+                            <div className="relative">
+                              <Input
+                                {...field}
+                                placeholder="Category name"
+                                className="bg-background"
+                                value={field.value || ""}
+                              />
+                              {isCheckingName && (
+                                <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                                  <Loader2 className="h-4 w-4 animate-spin" />
+                                </div>
+                              )}
+                            </div>
                           </FormControl>
                           <FormMessage />
                         </FormItem>
