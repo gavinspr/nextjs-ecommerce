@@ -1,4 +1,4 @@
-type DebounceFn<T extends unknown[]> = {
+export type DebounceFn<T extends unknown[]> = {
   (...args: T): void;
   cancel: () => void;
 };

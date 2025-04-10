@@ -2,7 +2,6 @@
 
 import React, {
   useState,
-  useCallback,
   useRef,
   useEffect,
   FormEvent,
@@ -13,6 +12,7 @@ import { Search, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { debounce, DebounceFn } from "@/utils/debounce";
 
 interface SearchInputProps {
   onSearch: (term: string) => void;
@@ -41,9 +41,10 @@ export const SearchInput = ({
   const [isExpanded, setIsExpanded] = useState(
     defaultExpanded || !isCollapsible
   );
-  
+
   const inputRef = useRef<HTMLInputElement>(null);
-  const timerRef = useRef<NodeJS.Timeout | null>(null); 
+  const latestOnSearchRef = useRef(onSearch);
+  const latestClearOnSearchRef = useRef(clearOnSearch);
 
   useEffect(() => {
     if (isExpanded && inputRef.current) {
@@ -51,19 +52,15 @@ export const SearchInput = ({
     }
   }, [isExpanded]);
 
-  const debouncedSearch = useCallback(
-    (value: string) => {
-      if (timerRef.current) {
-        clearTimeout(timerRef.current);
-      }
-      timerRef.current = setTimeout(() => {
-        onSearch(value);
-        if (clearOnSearch) {
+  const debouncedSearch: DebounceFn<[string]> = useMemo(
+    () =>
+      debounce((value: string) => {
+        latestOnSearchRef.current(value);
+        if (latestClearOnSearchRef.current) {
           setSearchTerm("");
         }
-      }, debounceTime);
-    },
-    [debounceTime, clearOnSearch, onSearch] 
+      }, debounceTime),
+    [debounceTime]
   );
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
