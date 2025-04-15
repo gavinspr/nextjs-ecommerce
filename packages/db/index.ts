@@ -12,4 +12,3 @@ const sql = postgres(connectionString);
 export const db = drizzle(sql, { schema });
 
 export { schema };
-export * from "drizzle-orm";

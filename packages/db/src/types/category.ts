@@ -1,7 +1,14 @@
-import { createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
-import { categoriesTable } from "../schemas";
+import {
+  categoryFormSchema,
+  insertCategorySchema,
+  selectCategorySchema,
+  updateCategorySchema,
+} from "../schemas/categories";
 
-export const categorySelectSchema = createSelectSchema(categoriesTable);
+export type Category = z.infer<typeof selectCategorySchema>;
 
-export type Category = z.infer<typeof categorySelectSchema>;
+export type InsertCategory = z.infer<typeof insertCategorySchema>;
+export type UpdateCategory = z.infer<typeof updateCategorySchema>;
+
+export type CategoryFormValues = z.infer<ReturnType<typeof categoryFormSchema>>;

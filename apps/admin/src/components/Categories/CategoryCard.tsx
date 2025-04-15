@@ -54,7 +54,7 @@ export const CategoryCard = ({ category }: CategoryCardProps) => {
     <Card className="overflow-hidden group h-72 cursor-pointer relative">
       <div className="absolute inset-0">
         <Image
-          src={category.image}
+          src={category.imageUrl}
           alt={category.name}
           className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
           fill

@@ -1,15 +1,15 @@
 "use server";
 
 import { uploadToBlob } from "@/lib/blob-upload";
-import { and, db, eq, not, sql } from "@nextjs-ecommerce/db";
-import { categoriesTable } from "@nextjs-ecommerce/db/src/schemas";
-import { categorySelectSchema } from "@nextjs-ecommerce/db/src/types";
-import { revalidatePath } from "next/cache";
 import {
-  createCategoryFormSchema,
-  updateCategoryFormSchema,
-} from "@/validators/category";
-import { InsertCategory, UpdateCategory } from "@/types/category";
+  categoriesTable,
+  categoryFormSchema,
+  selectCategorySchema,
+} from "@nextjs-ecommerce/db/src/schemas";
+import { revalidatePath } from "next/cache";
+import { db } from "@nextjs-ecommerce/db";
+import { eq, sql } from "drizzle-orm";
+import { InsertCategory, UpdateCategory } from "@nextjs-ecommerce/db/src/types";
 
 // todo: secure after setting up auth
 
@@ -20,7 +20,7 @@ export async function getCategoryById(id: string) {
       .from(categoriesTable)
       .where(eq(categoriesTable.id, id));
 
-    const category = categorySelectSchema.parse(result);
+    const category = selectCategorySchema.parse(result);
     return category;
   } catch (error) {
     console.error("Failed to fetch category:", error);
@@ -36,7 +36,7 @@ export async function getAllCategories() {
       .orderBy(sql`LOWER(${categoriesTable.name})`);
 
     const categories = results.map((result) =>
-      categorySelectSchema.parse(result)
+      selectCategorySchema.parse(result)
     );
     return categories;
   } catch (error) {
@@ -45,38 +45,12 @@ export async function getAllCategories() {
   }
 }
 
-export async function checkCategoryNameUnique(
-  name: string,
-  excludeId?: string
-) {
-  const query = excludeId
-    ? db
-        .select()
-        .from(categoriesTable)
-        .where(
-          and(
-            eq(categoriesTable.name, name),
-            not(eq(categoriesTable.id, excludeId))
-          )
-        )
-    : db.select().from(categoriesTable).where(eq(categoriesTable.name, name));
-
-  const existingCategories = await query;
-  return existingCategories.length === 0;
-}
-
 export async function createCategory(formData: FormData) {
   try {
     const rawData = Object.fromEntries(formData.entries());
 
-    const validated = await createCategoryFormSchema.safeParseAsync(rawData);
-
-    const isNameUnique = await checkCategoryNameUnique(
-      formData.get("name") as string
-    );
-    if (!isNameUnique) {
-      throw new Error("Category name already exists");
-    }
+    const createSchema = categoryFormSchema(false);
+    const validated = await createSchema.safeParseAsync(rawData);
 
     if (!validated.success) {
       console.error("Validation errors:", validated.error.format());
@@ -85,9 +59,13 @@ export async function createCategory(formData: FormData) {
 
     const { image, ...restData } = validated.data;
 
+    if (!image) {
+      throw new Error("Image is required");
+    }
+
     const imageUrl = await uploadToBlob(image);
 
-    const categoryData: InsertCategory = { ...restData, image: imageUrl };
+    const categoryData: InsertCategory = { ...restData, imageUrl };
 
     await db.insert(categoriesTable).values(categoryData).returning();
 
@@ -104,15 +82,8 @@ export async function updateCategory(id: string, formData: FormData) {
   try {
     const rawData = Object.fromEntries(formData.entries());
 
-    const validated = await updateCategoryFormSchema.safeParseAsync(rawData);
-
-    const isNameUnique = await checkCategoryNameUnique(
-      formData.get("name") as string,
-      id
-    );
-    if (!isNameUnique) {
-      throw new Error("Category name already exists");
-    }
+    const updateSchema = categoryFormSchema(true);
+    const validated = await updateSchema.safeParseAsync(rawData);
 
     if (rawData.image instanceof File && rawData.image.size === 0) {
       delete rawData.image;
@@ -125,10 +96,10 @@ export async function updateCategory(id: string, formData: FormData) {
 
     const { image, ...restData } = validated.data;
 
-    const updateData: UpdateCategory = { ...restData };
+    const updateData: UpdateCategory = { ...restData, id };
 
     if (image) {
-      updateData.image = await uploadToBlob(image);
+      updateData.imageUrl = await uploadToBlob(image);
     }
 
     await db

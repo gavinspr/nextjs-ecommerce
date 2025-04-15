@@ -20,7 +20,7 @@ import {
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
 import { SIDEBAR_ITEMS } from "@/constants/sidebar-items";
-import { SidebarItem } from "@/types/SidebarItem";
+import { SidebarItem } from "@/types/sidebar-item";
 import { FaShop } from "react-icons/fa6";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";

@@ -1,4 +1,4 @@
-import { SidebarItem } from "../types/SidebarItem";
+import { SidebarItem } from "../types/sidebar-item";
 import {
   LuPackage,
   LuChartLine,
