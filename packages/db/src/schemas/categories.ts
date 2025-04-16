@@ -1,7 +1,10 @@
+import { relations } from "drizzle-orm";
 import { pgTable, uuid, varchar, text, boolean } from "drizzle-orm/pg-core";
+import { productCategoriesTable } from "./product-categories";
 import { timestamps } from "../helpers/columns";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
+import { selectProductSchema } from "./products";
 
 export const categoriesTable = pgTable("categories", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -55,3 +58,11 @@ export const categoryFormSchema = (isUpdate: boolean = false) =>
           }
         }),
     });
+
+export const categoriesRelations = relations(categoriesTable, ({ many }) => ({
+  products: many(productCategoriesTable),
+}));
+
+export const categoryWithRelationsSchema = selectCategorySchema.extend({
+  products: z.array(selectProductSchema).optional(),
+});

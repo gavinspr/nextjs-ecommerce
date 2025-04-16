@@ -7,6 +7,7 @@ import pluralize from "pluralize";
 export function useFieldValidation(
   tableName: string,
   fieldName: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   form: any,
   initialId?: string,
   options: {
@@ -50,6 +51,7 @@ export function useFieldValidation(
       }
     }, debounceTime);
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const subscription = form.watch((values: any) => {
       if (values[fieldName]) {
         debouncedCheck(values[fieldName]);
