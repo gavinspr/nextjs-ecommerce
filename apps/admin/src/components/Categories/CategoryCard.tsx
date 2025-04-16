@@ -17,6 +17,7 @@ import { Category } from "@nextjs-ecommerce/db/src/types";
 import { deleteCategory, toggleCategoryStatus } from "@/actions/categories";
 import { toast } from "sonner";
 import { useState } from "react";
+import { DeleteAlertButton } from "@/components/DeleteAlertButton";
 
 interface CategoryCardProps {
   category: Category;
@@ -38,9 +39,7 @@ export const CategoryCard = ({ category }: CategoryCardProps) => {
     });
   };
 
-  const handleDelete = async (e: React.MouseEvent<HTMLElement>) => {
-    e.preventDefault();
-
+  const handleDelete = async () => {
     toast.promise(deleteCategory(category.id), {
       loading: "Deleting category...",
       success: () => {
@@ -58,6 +57,7 @@ export const CategoryCard = ({ category }: CategoryCardProps) => {
           alt={category.name}
           className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
           fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
         <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors" />
       </div>
@@ -91,13 +91,24 @@ export const CategoryCard = ({ category }: CategoryCardProps) => {
                 href={`/products/categories/${category.id}`}
                 onClick={(e) => e.stopPropagation()}
               >
-                <DropdownMenuItem>Edit</DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer">
+                  Edit
+                </DropdownMenuItem>
               </Link>
-              <DropdownMenuItem onClick={handleToggleStatus}>
+              <DropdownMenuItem
+                onClick={handleToggleStatus}
+                className="cursor-pointer"
+              >
                 {category.isActive ? "Deactivate" : "Activate"}
               </DropdownMenuItem>
-              <DropdownMenuItem className="text-red-600" onClick={handleDelete}>
-                Delete
+              <DropdownMenuItem
+                className="cursor-pointer"
+                onSelect={(e) => e.preventDefault()}
+              >
+                <DeleteAlertButton
+                  onConfirm={handleDelete}
+                  itemType="category"
+                />
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

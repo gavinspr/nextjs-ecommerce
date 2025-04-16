@@ -21,7 +21,7 @@ interface DiscardAlertProps {
   message?: string;
 }
 
-export const DiscardAlertButton = ({
+export const FormDiscardAlertButton = ({
   onConfirm,
   isDirty,
   isSubmitting,

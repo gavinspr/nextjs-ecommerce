@@ -20,7 +20,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitButton } from "../SubmitButton";
 import { toast } from "sonner";
 import { useNavigationGuard } from "@/hooks/use-navigation-guard";
-import { DiscardAlertButton } from "../DiscardAlertButton";
+import { FormDiscardAlertButton } from "../FormDiscardAlertButton";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Loader2 } from "lucide-react";
@@ -116,7 +116,7 @@ export const CategoryForm = ({ initialData, onSubmit }: CategoryFormProps) => {
             {initialData ? "Edit Category" : "Add New Category"}
           </h1>
           <div className="flex gap-2 md:gap-4 w-full md:w-auto mt-2 md:mt-0">
-            <DiscardAlertButton
+            <FormDiscardAlertButton
               onConfirm={handleConfirmDiscard}
               isDirty={isDirty}
               isSubmitting={isSubmitting}
